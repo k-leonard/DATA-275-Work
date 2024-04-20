@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Problem 1</title>
+    </head>
+
+    <body>
+        <h1>Estimating Jupiter's Mass</h1>
+        <br />
+        <div class="flex-row">
+            <div>
+                <p style="opacity: 0.5">Authors</p>
+                <p>Paul McSlarrow & Kendall Leonard</p>
+            </div>
+
+            <div>
+                <p style="opacity: 0.5">Published</p>
+                <p>Febuary 2nd, 2024</p>
+            </div>
+        </div>
+        <br />
+
+        <span>
+            In this problem we have been tasked with determining the mass of Jupiter.
+            We are given information inside two CSV files that correspond to Jupiter's
+            data and the Moon's data. Some of the data that we are given corresponds
+            to both Jupiter and the Moon's JD, right ascension, declination, and distance in AU. 
+        </span>
+
+<!-- UNDERSTANDING THE DATA -->
+        <h3>Understanding the Data</h3>
+        <span>
+            First and foremost, it is appropriate to show what the data looked like
+            prior to cleaning. Below is a screenshot of what the data actually looks like.
+        </span>
+
+        <img src="./images/init_data.png" alt="Data" width="50%"/>
+
+        <span>
+            It is evident that the data points look a little messy for calculation. So in the next step, 
+            we formatted the right ascension and declination from this messy format, into separate columns
+            corresponding to their hours, minutes, and seconds. 
+        </span>
+
+<!-- CLEANING THE DATA -->
+        <h3>Cleaning the Data</h3>
+
+        <span>
+            We created two function that would clean our data by separating each hour, minute, and second
+            into its own column by splitting on the delimeter (a space). Once we were able to split them into their 
+            own columns, we then pasted the HMS into HH:MM:SS format for future use if needed.
+        </span>
+
+        <img src="./images/format_function.png" alt="Data" width="80%"/>
+
+        <span>
+            Once we separated each HMS into their own columns, we mutated both the Jupiter data
+            and the Moon data, such that we calculate the single numerical value for declination
+            and right ascension.
+        </span>
+
+        <img src="./images/calc_dec_ra.png" alt="Data" width="80%"/>
+
+        <span>Our new and reformed data looks as follows</span>
+
+        <img src="./images/data_after_cleaning.png" alt="Data" width="50%"/>
+
+<!-- JOINING AND MAKING CALCULATIONS ON THE DATA -->
+        <h3>Joining and analyzing our data</h3>
+        <span>
+            It is important to note at this time, that we needed to take the difference between the moon's
+            position and Jupiter's position to get the moon's position relative to the planet. To accomplish
+            this, we joined the two tables together into a master dataframe. We joined the two together
+            to make it easier to calculate things between the moon and Jupiter if needed for later. 
+        </span>
+
+        <img src="./images/master_df.png" alt="Data" width="50%"/>
+
+        <span>
+            After joining the two tables together, we were able to plot the peaks and troughs
+            of the orbits against JD. By doing so, we are able to take a rough estimate of the orbital period.
+        </span>
+
+        <img src="./images/peaks.png" alt="Data" width="50%"/>
+
+<!-- CALCULATIONS -->
+        <h3>Making Calculations</h3>
+        <span>
+            To be able to get the mass, we must first find the orbital period, semi_major axis, and 
+            calculate the angular separation in order to be applied to the mass equation. It is appropriate
+            at this time to note that the equation for the total mass of a planet is the average_separation^3 / years^2.
+            We will now go through the steps necessary to get the total mass
+        </span>
+
+        <h4>Step 1. Calculating the Orbital Period</h4>
+        <span>
+            We start by analyzing the peaks and troughs we found prior. Looking between the lowest two
+            troughs, we are able to estimate the min_jd and the max_jd, which, if subtracted, will give us the number of days
+            it took for an orbit to complete in full. We then want to make it useful for us in our calculations of total
+            mass by converting the total number of days into years. 
+        </span>
+
+        <img src="./images/orbital_period.png" alt="Data" width="30%"/>
+
+
+        <h4>Step 2. Calculating the Angular Separation</h4>
+        <span>
+            After calculating the Orbital Period, we need to calculate the angular separation
+            to get the separation between Jupiter and the Moon. We then use theta (semi major axis)
+            to convert the degrees between the two objects into a distance between them. 
+        </span>
+
+        <img src="./images/ang_sep.png" alt="Data" width="50%"/>
+
+
+        <h4>Step 3. Calculating the Total Mass</h4>
+        <span>
+            Now that we have the orbital period and the angular separations, we can calculate
+            the total mass using the average separation and the orbital period in years!
+        </span>
+
+        <img src="./images/total_mass.png" alt="Data" width="50%"/>
+
+        <h4>The Total Mass</h4>
+        <span id="final">
+            0.0008269343 AU
+        </span>
+    </body>
+</html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        line-height: 1.6rem;
+    }
+    h1:nth-child(1) {
+        background-color: lightblue;
+        padding: 15px;
+    }
+    h3 {
+        padding: 15px;
+    }
+    h4 {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    p {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .flex-row {
+        display: flex;
+        justify-content: space-between;
+    }
+    span {
+        display: flex;
+        justify-content: left;
+        align-self: left;
+        padding: 15px;
+    }
+    img {
+        padding: 15px;
+    }
+    #final {
+        background-color: lightblue;
+        font-size: 1.5rem;
+    }
+
+</style>
